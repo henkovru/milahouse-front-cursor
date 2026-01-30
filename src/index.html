@@ -1,0 +1,1040 @@
+<%
+  var _ = require('lodash');
+  var header = _.template(require('./includes/header.html').default)();
+  var footer = _.template(require('./includes/footer.html').default)();
+  
+  // ========================================
+  // ДАННЫЕ ДЛЯ БЭКЕНДЕРА - ДОСТОПРИМЕЧАТЕЛЬНОСТИ
+  // Бэкендер может легко изменить этот массив
+  // ========================================
+  var attractionsData = [
+    { id: 1, img: 'https://xn----7sbfo4ajeedkpo6k.xn--p1ai/uploads/attraction/compress/1.png', title: 'Джиппинг к водопадам' },
+    { id: 2, img: 'https://xn----7sbfo4ajeedkpo6k.xn--p1ai/uploads/attraction/compress/11.png', title: 'Экскурсии на Абрау-Дюрсо' },
+    { id: 3, img: 'https://xn----7sbfo4ajeedkpo6k.xn--p1ai/uploads/attraction/compress/25.png', title: 'Завораживающий шоу-парк' },
+    { id: 4, img: 'https://xn----7sbfo4ajeedkpo6k.xn--p1ai/uploads/attraction/compress/26.png', title: 'Морские прогулки' },
+    { id: 5, img: 'https://xn----7sbfo4ajeedkpo6k.xn--p1ai/uploads/attraction/compress/12.png', title: 'Кабардинка и сухогруз RIO' },
+    { id: 6, img: 'https://xn----7sbfo4ajeedkpo6k.xn--p1ai/uploads/attraction/compress/27.png', title: 'Дайвинг с инструктором' },
+    { id: 7, img: 'https://xn----7sbfo4ajeedkpo6k.xn--p1ai/uploads/attraction/compress/7.png', title: 'Дикий пляж «Сосновка»' },
+    { id: 8, img: 'https://xn----7sbfo4ajeedkpo6k.xn--p1ai/uploads/attraction/compress/8.png', title: 'Прогулки на квадроциклах' },
+    { id: 9, img: 'https://xn----7sbfo4ajeedkpo6k.xn--p1ai/uploads/attraction/compress/9.png', title: 'Парк аттракционов' },
+    { id: 10, img: 'https://xn----7sbfo4ajeedkpo6k.xn--p1ai/uploads/attraction/compress/1.png', title: 'Атмосферный Сафари-Парк' },
+    { id: 11, img: 'https://xn----7sbfo4ajeedkpo6k.xn--p1ai/uploads/attraction/compress/2.png', title: 'Канатная дорога на смотровую площадку' },
+    { id: 12, img: 'https://xn----7sbfo4ajeedkpo6k.xn--p1ai/uploads/attraction/compress/3.png', title: 'Конные прогулки в Прасковеевке' }
+  ];
+  
+  // Количество видимых элементов на мобилке (остальные скрыты)
+  var attractionsMobileVisible = 6;
+%>
+<!DOCTYPE html>
+<html lang="ru">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>MilaHouse - Гостевой дом в Геленджике</title>
+    <link rel="icon" type="image/svg+xml" href="/img/svg/logo.svg">
+</head>
+
+<body class="bg-grey font-base text-black">
+    <div class="preloader" id="sitePreloader" aria-hidden="true">
+        <img src="/img/svg/logo.svg" alt="" class="preloader__logo">
+    </div>
+
+    <%= header %>
+
+    <!-- Hero Section -->
+    <section class="hero" id="hero">
+        <div class="hero__background">
+            <img src="/img/png/hero-bg.png" alt="" class="hero__background-img hero__background-img--desktop">
+            <img src="/img/png/bg-hero-mb.png" alt="" class="hero__background-img hero__background-img--mobile">
+        </div>
+        <div class="hero__container">
+            <div class="hero__content">
+                <h1 class="hero__title">Тепло дома, свежесть курорта</h1>
+                <!-- 
+                  Формат данных для бэкендера:
+                  data-bookings - JSON массив объектов бронирований
+                  Каждый объект: {"checkin":"YYYY-MM-DD","checkout":"YYYY-MM-DD","roomId":"N"}
+                  Для hero формы всегда пустой массив [] - это лид-магнит, бронирования не нужны
+                -->
+                <form class="hero__form" data-bookings="[]">
+                    <div class="hero__form-group">
+                        <label class="hero__form-label">Заезд</label>
+                        <div class="hero__form-input-wrapper">
+                            <input type="text" class="hero__form-input" id="checkin-input" placeholder="">
+                            <button type="button" class="hero__form-icon-btn" id="checkin-btn">
+                                <img src="/img/svg/icon-calendar-booking.svg" alt="Календарь" class="hero__form-icon">
+                            </button>
+                            <div id="checkin-date-picker" class="date-picker-dropdown" style="display: none;"></div>
+                        </div>
+                    </div>
+                    <div class="hero__form-group">
+                        <label class="hero__form-label">Отъезд</label>
+                        <div class="hero__form-input-wrapper">
+                            <input type="text" class="hero__form-input" id="checkout-input" placeholder="">
+                            <button type="button" class="hero__form-icon-btn" id="checkout-btn">
+                                <img src="/img/svg/icon-calendar-booking.svg" alt="Календарь" class="hero__form-icon">
+                            </button>
+                            <div id="checkout-date-picker" class="date-picker-dropdown" style="display: none;"></div>
+                        </div>
+                    </div>
+                    <div class="hero__form-group-wrapper">
+                        <div class="hero__form-group">
+                            <label class="hero__form-label">Взрослые</label>
+                            <div class="hero__form-counter">
+                                <div class="hero__form-counter-wrapper">
+                                    <button type="button" class="hero__form-counter-btn hero__form-counter-btn--minus" data-counter-minus>-</button>
+                                    <input type="number" class="hero__form-counter-value" value="2" min="0" max="15" step="1" data-counter-value>
+                                    <button type="button" class="hero__form-counter-btn hero__form-counter-btn--plus" data-counter-plus>+</button>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="hero__form-group">
+                            <label class="hero__form-label">Дети до 7 лет</label>
+                            <div class="hero__form-counter">
+                                <div class="hero__form-counter-wrapper">
+                                    <button type="button" class="hero__form-counter-btn hero__form-counter-btn--minus" data-counter-minus>-</button>
+                                    <input type="number" class="hero__form-counter-value" value="0" min="0" max="15" step="1" data-counter-value>
+                                    <button type="button" class="hero__form-counter-btn hero__form-counter-btn--plus" data-counter-plus>+</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <button type="button" class="hero__form-submit" data-fancybox-dialog data-src="/dialogs/lead-modal.html">Узнать цены</button>
+                </form>
+            </div>
+        </div>
+    </section>
+    <!-- About Section -->
+    <section class="about" id="about">
+        <div class="about__container">
+            <img src="/img/png/image-capli-1.png" alt="" class="about__drop about__drop--left">
+            <img src="/img/png/image-capli-2.png" alt="" class="about__drop about__drop--right">
+            <div class="about__content">
+                <div class="about__image-wrapper">
+                    <div class="about__image-container">
+                        <img src="/img/png/about-image.png" alt="MilaHouse" class="about__image">
+                    </div>
+                    <div class="about__card">
+                        <h3 class="about__subtitle">MilaHouse</h3>
+                        <p class="about__description">
+                            <span class="about__description--bold">Приезжайте в гостевой домик MilaHouse – место, где
+                                ласковое черноморское солнце, тёплый бриз и домашний уют создают идеальную атмосферу для
+                                отдыха. </span> Здесь вас ждут комфортные номера, уютная терраса с видом на зелёные
+                            холмы и всего несколько минут ходьбы до галечных пляжей.
+                        </p>
+                        <p class="about__description">
+                            Мы создали пространство, в котором хочется остаться подольше – с душевной заботой и
+                            вниманием к деталям.
+                        </p>
+                        <div class="about__footer">
+                            <div class="about__icon">
+                                <img src="/img/svg/home.svg" alt="MilaHouse">
+                            </div>
+                            <h2 class="about__title">Ваш уголок <br> спокойствия и уюта</h2>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Statistics Section -->
+    <section class="statistics">
+        <div class="statistics__container">
+            <div class="statistics__item">
+                <div class="statistics__value">30+</div>
+                <div class="statistics__label">температура воды <br>в бассейне</div>
+                <img class="statistics__line" src="/img/svg/image-line.svg" alt="">
+            </div>
+            <div class="statistics__item">
+                <div class="statistics__value">5</div>
+                <div class="statistics__label">комфортабельных <br>номеров</div>
+                <img class="statistics__line" src="/img/svg/image-line.svg" alt="">
+            </div>
+            <div class="statistics__item">
+                <div class="statistics__value">600</div>
+                <div class="statistics__label">метров от отеля <br>до моря</div>
+                <img class="statistics__line" src="/img/svg/image-line.svg" alt="">
+            </div>
+            <div class="statistics__item">
+                <div class="statistics__value">4.9</div>
+                <div class="statistics__label">средняя оценка <br>от посетителей</div>
+                <img class="statistics__line" src="/img/svg/image-line.svg" alt="">
+            </div>
+        </div>
+    </section>
+
+    <!-- Rooms Section -->
+    <section class="rooms" id="rooms">
+        <div class="rooms__container">
+            <h2 class="rooms__title">Номера и цены</h2>
+            <div class="rooms__wrapper">
+                <!-- Desktop tabs -->
+                <div class="rooms__tabs hidden md:flex">
+                    <button class="rooms__tab rooms__tab--active" data-tab="all">
+                        <span class="rooms__tab-title">Все номера</span>
+                        <span class="rooms__tab-count">9 номеров</span>
+                    </button>
+                    <button class="rooms__tab" data-tab="3">
+                        <span class="rooms__tab-title">До 3 человек</span>
+                        <span class="rooms__tab-count">5 номеров</span>
+                    </button>
+                    <button class="rooms__tab" data-tab="4">
+                        <span class="rooms__tab-title">До 4 человек</span>
+                        <span class="rooms__tab-count">4 номера</span>
+                    </button>
+                    <button class="rooms__tab" data-tab="6">
+                        <span class="rooms__tab-title">До 6 человек</span>
+                        <span class="rooms__tab-count">3 номера</span>
+                    </button>
+                    <button class="rooms__tab" data-tab="family">
+                        <span class="rooms__tab-title">Семейные</span>
+                        <span class="rooms__tab-count">3 номера</span>
+                    </button>
+                </div>
+                <!-- Mobile Swiper для табов -->
+                <div class="rooms__tabs md:hidden" data-slider="rooms-tabs">
+                    <div class="swiper" data-slider-swiper="rooms-tabs">
+                        <div class="swiper-wrapper">
+                            <div class="swiper-slide w-auto">
+                                <button class="rooms__tab rooms__tab--active" data-tab="all">
+                                    <span class="rooms__tab-title">Все номера</span>
+                                    <span class="rooms__tab-count">9 номеров</span>
+                                </button>
+                            </div>
+                            <div class="swiper-slide w-auto">
+                                <button class="rooms__tab" data-tab="3">
+                                    <span class="rooms__tab-title">До 3 человек</span>
+                                    <span class="rooms__tab-count">5 номеров</span>
+                                </button>
+                            </div>
+                            <div class="swiper-slide w-auto">
+                                <button class="rooms__tab" data-tab="4">
+                                    <span class="rooms__tab-title">До 4 человек</span>
+                                    <span class="rooms__tab-count">4 номера</span>
+                                </button>
+                            </div>
+                            <div class="swiper-slide w-auto">
+                                <button class="rooms__tab" data-tab="6">
+                                    <span class="rooms__tab-title">До 6 человек</span>
+                                    <span class="rooms__tab-count">3 номера</span>
+                                </button>
+                            </div>
+                            <div class="swiper-slide w-auto">
+                                <button class="rooms__tab" data-tab="family">
+                                    <span class="rooms__tab-title">Семейные</span>
+                                    <span class="rooms__tab-count">3 номера</span>
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="rooms__grid" id="roomsGrid">
+                    <!-- 
+                      data-room-bookings - JSON массив бронирований для конкретного номера
+                      Формат: [{"checkin":"YYYY-MM-DD","checkout":"YYYY-MM-DD","roomId":"N"}]
+                    -->
+                    <div class="rooms__card" data-fancybox-dialog data-src="/dialogs/room-modal.html?roomId=1" data-room-id="1" data-room-capacity="4" data-room-category="family" data-room-bookings='[{"checkin":"2026-02-15","checkout":"2026-02-20","roomId":"1"},{"checkin":"2026-02-25","checkout":"2026-03-01","roomId":"1"}]'>
+                        <div class="rooms__card-image-wrapper">
+                            <img src="/img/png/room-1.png" alt="Семейный, четырехместный номер Комфорт" class="rooms__card-image" data-room-image>
+                            <div class="rooms__card-image-overlay"></div>
+                            <div class="rooms__card-image-info">
+                                <div class="rooms__card-capacity-wrapper">
+                                    <div class="rooms__card-capacity">
+                                        <img src="/img/svg/icon-card.svg" alt="Дети" class="rooms__card-capacity-icon">
+                                        <span class="rooms__card-capacity-text" data-room-capacity-text>До 4</span>
+                                    </div>
+                                    <div class="rooms__card-capacity rooms__card-capacity--children">
+                                        <img src="/img/svg/children-icon.svg" alt="Дети" class="rooms__card-capacity-icon">
+                                        <span class="rooms__card-capacity-text">До 1</span>
+                                    </div>
+                                </div>
+                                <div class="rooms__card-price" data-room-price>4 500 ₽</div>
+                            </div>
+                        </div>
+                        <div class="rooms__card-content">
+                            <h3 class="rooms__card-title" data-room-title>Семейный, четырехместный номер Комфорт</h3>
+                        </div>
+                    </div>
+                    <div class="rooms__card" data-fancybox-dialog data-src="/dialogs/room-modal.html?roomId=2" data-room-id="2" data-room-capacity="4" data-room-category="4" data-room-bookings='[{"checkin":"2026-03-10","checkout":"2026-03-15","roomId":"2"}]'>
+                        <div class="rooms__card-image-wrapper">
+                            <img src="/img/png/room-2.png" alt="Четырехместный с балконом" class="rooms__card-image" data-room-image>
+                            <div class="rooms__card-image-overlay"></div>
+                            <div class="rooms__card-image-info">
+                                <div class="rooms__card-capacity">
+                                    <img src="/img/svg/icon-card.svg" alt="Дети" class="rooms__card-capacity-icon">
+                                    <span class="rooms__card-capacity-text" data-room-capacity-text>До 4</span>
+                                </div>
+                                <div class="rooms__card-price" data-room-price>4 500 ₽</div>
+                            </div>
+                        </div>
+                        <div class="rooms__card-content">
+                            <h3 class="rooms__card-title" data-room-title>Четырехместный с балконом</h3>
+                        </div>
+                    </div>
+                    <div class="rooms__card" data-fancybox-dialog data-src="/dialogs/room-modal.html?roomId=3" data-room-id="3" data-room-capacity="4" data-room-category="4" data-room-bookings='[{"checkin":"2026-04-01","checkout":"2026-04-05","roomId":"3"}]'>
+                        <div class="rooms__card-image-wrapper">
+                            <img src="/img/png/room-3.png" alt="Четырехместный с балконом" class="rooms__card-image" data-room-image>
+                            <div class="rooms__card-image-overlay"></div>
+                            <div class="rooms__card-image-info">
+                                <div class="rooms__card-capacity">
+                                    <img src="/img/svg/icon-card.svg" alt="Дети" class="rooms__card-capacity-icon">
+                                    <span class="rooms__card-capacity-text" data-room-capacity-text>До 4</span>
+                                </div>
+                                <div class="rooms__card-price" data-room-price>4 500 ₽</div>
+                            </div>
+                        </div>
+                        <div class="rooms__card-content">
+                            <h3 class="rooms__card-title" data-room-title>Четырехместный с балконом</h3>
+                        </div>
+                    </div>
+                    <div class="rooms__card" data-fancybox-dialog data-src="/dialogs/room-modal.html?roomId=4" data-room-id="4" data-room-capacity="4" data-room-category="4">
+                        <div class="rooms__card-image-wrapper">
+                            <img src="/img/png/room-4.png" alt="Четырехместный без балкона" class="rooms__card-image" data-room-image>
+                            <div class="rooms__card-image-overlay"></div>
+                            <div class="rooms__card-image-info">
+                                <div class="rooms__card-capacity">
+                                    <img src="/img/svg/icon-card.svg" alt="Дети" class="rooms__card-capacity-icon">
+                                    <span class="rooms__card-capacity-text" data-room-capacity-text>До 4</span>
+                                </div>
+                                <div class="rooms__card-price" data-room-price>4 500 ₽</div>
+                            </div>
+                        </div>
+                        <div class="rooms__card-content">
+                            <h3 class="rooms__card-title" data-room-title>Четырехместный без балкона</h3>
+                        </div>
+                    </div>
+                    <div class="rooms__card" data-fancybox-dialog data-src="/dialogs/room-modal.html?roomId=5" data-room-id="5" data-room-capacity="4" data-room-category="4">
+                        <div class="rooms__card-image-wrapper">
+                            <img src="/img/png/room-5.png" alt="Двухкомнатные апартаменты" class="rooms__card-image" data-room-image>
+                            <div class="rooms__card-image-overlay"></div>
+                            <div class="rooms__card-image-info">
+                                <div class="rooms__card-capacity">
+                                    <img src="/img/svg/icon-card.svg" alt="Дети" class="rooms__card-capacity-icon">
+                                    <span class="rooms__card-capacity-text" data-room-capacity-text>До 4</span>
+                                </div>
+                                <div class="rooms__card-price" data-room-price>7 500 ₽</div>
+                            </div>
+                        </div>
+                        <div class="rooms__card-content">
+                            <h3 class="rooms__card-title" data-room-title>Двухкомнатные апартаменты</h3>
+                        </div>
+                    </div>
+                    <div class="rooms__card" data-fancybox-dialog data-src="/dialogs/room-modal.html?roomId=6" data-room-id="6" data-room-capacity="4" data-room-category="4">
+                        <div class="rooms__card-image-wrapper">
+                            <img src="/img/png/room-6.png" alt="Четырехместный с балконом" class="rooms__card-image" data-room-image>
+                            <div class="rooms__card-image-overlay"></div>
+                            <div class="rooms__card-image-info">
+                                <div class="rooms__card-capacity">
+                                    <img src="/img/svg/icon-card.svg" alt="Дети" class="rooms__card-capacity-icon">
+                                    <span class="rooms__card-capacity-text" data-room-capacity-text>До 4</span>
+                                </div>
+                                <div class="rooms__card-price" data-room-price>10 000 ₽</div>
+                            </div>
+                        </div>
+                        <div class="rooms__card-content">
+                            <h3 class="rooms__card-title" data-room-title>Четырехместный с балконом</h3>
+                        </div>
+                    </div>
+                    <div class="rooms__card" data-fancybox-dialog data-src="/dialogs/room-modal.html?roomId=7" data-room-id="7" data-room-capacity="6" data-room-category="6">
+                        <div class="rooms__card-image-wrapper">
+                            <img src="/img/png/room-7.png" alt="Двухкомнатный шестиместный с балконом" class="rooms__card-image" data-room-image>
+                            <div class="rooms__card-image-overlay"></div>
+                            <div class="rooms__card-image-info">
+                                <div class="rooms__card-capacity">
+                                    <img src="/img/svg/icon-card.svg" alt="Дети" class="rooms__card-capacity-icon">
+                                    <span class="rooms__card-capacity-text" data-room-capacity-text>До 6</span>
+                                </div>
+                                <div class="rooms__card-price" data-room-price>7500 ₽</div>
+                            </div>
+                        </div>
+                        <div class="rooms__card-content">
+                            <h3 class="rooms__card-title" data-room-title>Двухкомнатный шестиместный с балконом</h3>
+                        </div>
+                    </div>
+                    <div class="rooms__card" data-fancybox-dialog data-src="/dialogs/room-modal.html?roomId=8" data-room-id="8" data-room-capacity="4" data-room-category="4">
+                        <div class="rooms__card-image-wrapper">
+                            <img src="/img/png/room-8.png" alt="Двухкомнатные апартаменты" class="rooms__card-image" data-room-image>
+                            <div class="rooms__card-image-overlay"></div>
+                            <div class="rooms__card-image-info">
+                                <div class="rooms__card-capacity">
+                                    <img src="/img/svg/icon-card.svg" alt="Дети" class="rooms__card-capacity-icon">
+                                    <span class="rooms__card-capacity-text" data-room-capacity-text>До 4</span>
+                                </div>
+                                <div class="rooms__card-price" data-room-price>7 500 ₽</div>
+                            </div>
+                        </div>
+                        <div class="rooms__card-content">
+                            <h3 class="rooms__card-title" data-room-title>Двухкомнатные апартаменты</h3>
+                        </div>
+                    </div>
+                    <div class="rooms__card" data-fancybox-dialog data-src="/dialogs/room-modal.html?roomId=9" data-room-id="9" data-room-capacity="3" data-room-category="3">
+                        <div class="rooms__card-image-wrapper">
+                            <img src="/img/png/room-1.png" alt="Трехместный с балконом" class="rooms__card-image" data-room-image>
+                            <div class="rooms__card-image-overlay"></div>
+                            <div class="rooms__card-image-info">
+                                <div class="rooms__card-capacity">
+                                    <img src="/img/svg/icon-card.svg" alt="Дети" class="rooms__card-capacity-icon">
+                                    <span class="rooms__card-capacity-text" data-room-capacity-text>До 3</span>
+                                </div>
+                                <div class="rooms__card-price" data-room-price>4 500 ₽</div>
+                            </div>
+                        </div>
+                        <div class="rooms__card-content">
+                            <h3 class="rooms__card-title" data-room-title>Трехместный с балконом</h3>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Gallery Section -->
+    <section class="fine" id="fine">
+        <div class="fine__title">Мы рады каждому</div>
+        <!-- Desktop slider -->
+        <div class="fine__slider fine__slider--desktop">
+            <div class="fine__blur fine__blur--left"></div>
+            <div class="fine__blur fine__blur--right"></div>
+            <div class="swiper fine-swiper">
+                <div class="swiper-wrapper">
+                    <div class="swiper-slide fine-slide fine-slide--single">
+                        <a href="/img/png/gallery-image-1.png" class="fine-slide__item" data-fancybox="gallery">
+                            <img src="/img/png/gallery-image-1.png" alt="Gallery 1">
+                        </a>
+                    </div>
+                    <div class="swiper-slide fine-slide fine-slide--double">
+                        <a href="/img/png/gallery-image-2.png" class="fine-slide__item" data-fancybox="gallery">
+                            <img src="/img/png/gallery-image-2.png" alt="Gallery 2">
+                        </a>
+                        <a href="/img/png/gallery-image-3.png" class="fine-slide__item" data-fancybox="gallery">
+                            <img src="/img/png/gallery-image-3.png" alt="Gallery 3">
+                        </a>
+                    </div>
+                    <div class="swiper-slide fine-slide fine-slide--single">
+                        <a href="/img/png/gallery-image-4.png" class="fine-slide__item" data-fancybox="gallery">
+                            <img src="/img/png/gallery-image-4.png" alt="Gallery 4">
+                        </a>
+                    </div>
+                    <div class="swiper-slide fine-slide fine-slide--double">
+                        <a href="/img/png/gallery-image-5.png" class="fine-slide__item" data-fancybox="gallery">
+                            <img src="/img/png/gallery-image-5.png" alt="Gallery 5">
+                        </a>
+                        <a href="/img/png/gallery-image-6.png" class="fine-slide__item" data-fancybox="gallery">
+                            <img src="/img/png/gallery-image-6.png" alt="Gallery 6">
+                        </a>
+                    </div>
+                    <div class="swiper-slide fine-slide fine-slide--single">
+                        <a href="/img/png/gallery-image-7.png" class="fine-slide__item" data-fancybox="gallery">
+                            <img src="/img/png/gallery-image-7.png" alt="Gallery 7">
+                        </a>
+                    </div>
+                    <div class="swiper-slide fine-slide fine-slide--double">
+                        <a href="/img/png/gallery-image-8.png" class="fine-slide__item" data-fancybox="gallery">
+                            <img src="/img/png/gallery-image-8.png" alt="Gallery 8">
+                        </a>
+                        <a href="/img/png/gallery-image-9.png" class="fine-slide__item" data-fancybox="gallery">
+                            <img src="/img/png/gallery-image-9.png" alt="Gallery 9" loading="lazy">
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!-- Mobile grid -->
+        <div class="fine__grid fine__grid--mobile">
+            <div class="fine__grid-item fine__grid-item--double">
+                <a href="/img/png/gallery-image-2.png" class="fine-slide__item" data-fancybox="gallery">
+                    <img src="/img/png/gallery-image-2.png" alt="Gallery 2">
+                </a>
+                <a href="/img/png/gallery-image-3.png" class="fine-slide__item" data-fancybox="gallery">
+                    <img src="/img/png/gallery-image-3.png" alt="Gallery 3">
+                </a>
+            </div>
+            <div class="fine__grid-item fine__grid-item--single">
+                <a href="/img/png/gallery-image-1.png" class="fine-slide__item" data-fancybox="gallery">
+                    <img src="/img/png/gallery-image-1.png" alt="Gallery 1">
+                </a>
+            </div>
+            <div class="fine__grid-item fine__grid-item--single">
+                <a href="/img/png/gallery-image-4.png" class="fine-slide__item" data-fancybox="gallery">
+                    <img src="/img/png/gallery-image-4.png" alt="Gallery 4">
+                </a>
+            </div>
+            <div class="fine__grid-item fine__grid-item--double">
+                <a href="/img/png/gallery-image-5.png" class="fine-slide__item" data-fancybox="gallery">
+                    <img src="/img/png/gallery-image-5.png" alt="Gallery 5">
+                </a>
+                <a href="/img/png/gallery-image-6.png" class="fine-slide__item" data-fancybox="gallery">
+                    <img src="/img/png/gallery-image-6.png" alt="Gallery 6">
+                </a>
+            </div>
+            <div class="fine__grid-item fine__grid-item--single fine__grid-item--hidden">
+                <a href="/img/png/gallery-image-1.png" class="fine-slide__item" data-fancybox="gallery">
+                    <img src="/img/png/gallery-image-1.png" alt="Gallery 7">
+                </a>
+            </div>
+            <div class="fine__grid-item fine__grid-item--double fine__grid-item--hidden">
+                <a href="/img/png/gallery-image-2.png" class="fine-slide__item" data-fancybox="gallery">
+                    <img src="/img/png/gallery-image-2.png" alt="Gallery 8">
+                </a>
+                <a href="/img/png/gallery-image-3.png" class="fine-slide__item" data-fancybox="gallery">
+                    <img src="/img/png/gallery-image-3.png" alt="Gallery 9">
+                </a>
+            </div>
+            <div class="fine__grid-item fine__grid-item--single fine__grid-item--hidden">
+                <a href="/img/png/gallery-image-4.png" class="fine-slide__item" data-fancybox="gallery">
+                    <img src="/img/png/gallery-image-4.png" alt="Gallery 10">
+                </a>
+            </div>
+            <div class="fine__grid-item fine__grid-item--double fine__grid-item--hidden">
+                <a href="/img/png/gallery-image-5.png" class="fine-slide__item" data-fancybox="gallery">
+                    <img src="/img/png/gallery-image-5.png" alt="Gallery 11">
+                </a>
+                <a href="/img/png/gallery-image-6.png" class="fine-slide__item" data-fancybox="gallery">
+                    <img src="/img/png/gallery-image-6.png" alt="Gallery 12">
+                </a>
+            </div>
+        </div>
+        <div class="fine__more-wrapper">
+            <button class="fine__more-btn" id="fineMoreBtn">Еще фото</button>
+        </div>
+    </section>
+
+    <!-- Reviews Section -->
+    <section class="reviews">
+        <div class="reviews__container">
+            <h2 class="reviews__title">Отзывы клиентов об отеле</h2>
+            <div class="reviews__content">
+                <img class="reviews__image" src="/img/png/reviews-image.png" alt="Reviews">
+                <div class="reviews__iframe-wrapper">
+                    <div class="reviews__reviews-yandex-map" style="width:560px;height:600px;overflow:hidden;position:relative;"><iframe
+                        style="width:100%;height:100%;border:1px solid #e6e6e6;border-radius:8px;box-sizing:border-box"
+                        src="https://yandex.ru/maps-reviews-widget/45542102947?comments"></iframe><a
+                        href="https://yandex.ru/maps/org/provans/45542102947/" target="_blank"
+                        style="box-sizing:border-box;text-decoration:none;color:#b3b3b3;font-size:10px;font-family:YS Text,sans-serif;padding:0 20px;position:absolute;bottom:8px;width:100%;text-align:center;left:0;overflow:hidden;text-overflow:ellipsis;display:block;max-height:14px;white-space:nowrap;padding:0 16px;box-sizing:border-box">Прованс
+                        на карте Геленджика — Яндекс Карты</a></div>
+                    <div class="reviews__buttons">
+                        <button class="reviews__button">Отзывы на Яндекс.Картах</button>
+                        <button class="reviews__button reviews__button--active">Отзывы на Авито</button>
+                    </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Features Section -->
+    <section class="features" id="features">
+        <div class="features__container">
+            <h2 class="features__title">Что у нас есть</h2>
+            <div class="features__grid">
+                <div class="features__item" data-feature-id="1" data-feature-type="pool">
+                    <img src="/img/png/pool.png" alt="Бассейн" class="features__item-image" data-feature-image>
+                    <div class="features__item-content">
+                        <h3 class="features__item-title" data-feature-title>Глубокий бассейн</h3>
+                        <p class="features__item-description" data-feature-description>с оборудованной детской зоной,
+                            бесплатный для наших гостей</p>
+                    </div>
+                </div>
+                <div class="features__item" data-feature-id="2" data-feature-type="playground">
+                    <img src="/img/png/playground.png" alt="Детский городок" class="features__item-image" data-feature-image>
+                    <div class="features__item-content">
+                        <h3 class="features__item-title" data-feature-title>Детский городок</h3>
+                        <p class="features__item-description" data-feature-description>с качелями, лазилками и
+                            прыгалками для детей. Они будут довольны!</p>
+                    </div>
+                </div>
+                <div class="features__item" data-feature-id="3" data-feature-type="rooms">
+                    <img src="/img/png/rooms-feature.png" alt="Номера" class="features__item-image" data-feature-image>
+                    <div class="features__item-content">
+                        <h3 class="features__item-title" data-feature-title>Удобные номера</h3>
+                        <p class="features__item-description" data-feature-description>в каждом номере есть
+                            сплит-система, телевизор, холодильник, фен и душевые принадлежности</p>
+                    </div>
+                </div>
+                <div class="features__item" data-feature-id="4" data-feature-type="all-inclusive">
+                    <img src="/img/png/all-inclusive.png" alt="Всё включено" class="features__item-image" data-feature-image>
+                    <div class="features__item-content">
+                        <h3 class="features__item-title" data-feature-title>Всё включено</h3>
+                        <p class="features__item-description" data-feature-description>Мангальная зона, три просторных
+                            беседки, лежаки, шезлонги - всё это уже включено в стоимость</p>
+                    </div>
+                </div>
+                <div class="features__item features__item--telegram" data-feature-id="5" data-feature-type="telegram">
+                    <div class="features__item-content">
+                        <img src="/img/svg/features-image.svg" alt="" class="features__image--bg">
+                        <div class="features__telegram-content">
+                            <img src="/img/svg/logo.svg" alt="Logo" class="features__logo-icon">
+                            <h3 class="features__item-title" data-feature-title>Присоединединяйтесь к нам в Telegram, чтобы
+                                быть в курсе актуальных новостей, акций и скидок</h3>
+                            <a href="https://t.me/provence_b" target="_blank" rel="noopener noreferrer" class="features__telegram-btn" data-telegram-link>
+                                <img src="/img/svg/telegram.svg" alt="Telegram">
+                                <span>Перейти в Telegram</span>
+                            </a>
+                        </div>
+                    </div>
+                </div>
+                <div class="features__item" data-feature-id="6" data-feature-type="transfer">
+                    <img src="/img/png/transfer.png" alt="Трансферы" class="features__item-image" data-feature-image>
+                    <div class="features__item-content">
+                        <h3 class="features__item-title" data-feature-title>Бесплатные трансферы</h3>
+                        <p class="features__item-description" data-feature-description>из аэропорта Геленджика и
+                            Новороссийска, а также на пляж и обратно, по расписанию</p>
+                    </div>
+                </div>
+                <div class="features__item" data-feature-id="7" data-feature-type="laundry">
+                    <img src="/img/png/laundry.png" alt="Прачечная" class="features__item-image" data-feature-image>
+                    <div class="features__item-content">
+                        <h3 class="features__item-title" data-feature-title>Прачечная</h3>
+                        <p class="features__item-description" data-feature-description>высококачественное оборудование,
+                            экологически безопасные технологии и услуги срочной стирки</p>
+                    </div>
+                </div>
+                <div class="features__item" data-feature-id="8" data-feature-type="delivery">
+                    <img src="/img/png/delivery.png" alt="Доставка" class="features__item-image" data-feature-image>
+                    <div class="features__item-content">
+                        <h3 class="features__item-title" data-feature-title>Доставка продуктов</h3>
+                        <p class="features__item-description" data-feature-description>у нас есть услуга заказа и
+                            доставки продуктов в номер</p>
+                    </div>
+                </div>
+                <div class="features__item" data-feature-id="9" data-feature-type="kitchen">
+                    <img src="/img/png/kitchen.png" alt="Кухня" class="features__item-image" data-feature-image>
+                    <div class="features__item-content">
+                        <h3 class="features__item-title" data-feature-title>Большая кухня</h3>
+                        <p class="features__item-description" data-feature-description>идеальное место, чтобы провести
+                            завтрак, обед и ужин в кругу друзей</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Provence Section -->
+    <section class="provence" id="provence">
+        <div class="provence__container">
+            <div class="provence__image-wrapper">
+                <img src="/img/png/flower/flower-01.png" alt="" class="provence__flower provence__flower--1">
+                <img src="/img/png/flower/flower-02.png" alt="" class="provence__flower provence__flower--2">
+                <img src="/img/png/flower/flower-03.png" alt="" class="provence__flower provence__flower--3">
+                <img src="/img/png/flower/flower-04.png" alt="" class="provence__flower provence__flower--4">
+                <img src="/img/png/flower/flower-05.png" alt="" class="provence__flower provence__flower--5">
+                <img src="/img/png/flower/flower-06.png" alt="" class="provence__flower provence__flower--6">
+                <img src="/img/png/flower/flower-07.png" alt="" class="provence__flower provence__flower--7">
+                <img src="/img/png/flower/flower-08.png" alt="" class="provence__flower provence__flower--8">
+                <img src="/img/png/flower/flower-09.png" alt="" class="provence__flower provence__flower--9">
+                <img src="/img/png/flower/flower-10.png" alt="" class="provence__flower provence__flower--10">
+                <img src="/img/png/flower/flower-11.png" alt="" class="provence__flower provence__flower--11">
+                <img src="/img/png/flower/flower-12.png" alt="" class="provence__flower provence__flower--12">
+                <img src="/img/png/flower/flower-13.png" alt="" class="provence__flower provence__flower--13">
+                <img src="/img/png/flower/flower-14.png" alt="" class="provence__flower provence__flower--14">
+                <img src="/img/png/provence-image.png" alt="Provence" class="provence__image">
+            </div>
+            <div class="provence__grid">
+                <img src="/img/png/leaf-1.png" alt="" class="provence__leaf provence__leaf--top">
+                <img src="/img/png/provence-logo.png" alt="Provence" class="provence__logo">
+                <h4 class="provence__subtitle">Посетите еще один наш отдель!</h4>
+                <h2 class="provence__title">Provence boutique hotel</h2>
+                <p class="provence__description">Гостевой дом Provence Boutique Hotel в сердце Геленджика — самого молодежного курорта страны. Вся развлекательная инфраструктура находится в 20 минутах ходьбы, а море в 15 минутах. К услугам гостей сезонный открытый бассейн, мангальная зона, беседки, детский игровой городок, большая общая кухня и Wi-Fi.</p>
+                <a href="https://прованс-отель.рф/" target="_blank" rel="noopener noreferrer" class="provence__btn">
+                    Открыть сайт
+                </a>
+                <img src="/img/png/leaf-2.png" alt="" class="provence__leaf provence__leaf--bottom">
+            </div>
+        </div>
+    </section>
+
+    <!-- Advantages Section -->
+    <section class="advantages" id="advantages">
+        <div class="advantages__container">
+            <div class="swiper advantages-swiper">
+                <div class="swiper-wrapper">
+                    <div class="swiper-slide advantages-slide">
+                        <div class="advantages-slide__content">
+                            <h2>Морской климат пойдет вам на пользу</h2>
+                            <p>Морской воздух оказывает положительное воздействие на здоровье. Он способен облегчить симптомы заболеваний и укрепить иммунную систему.</p>
+                            <button>
+                                <img src="/img/svg/advantages-icon.svg" alt="Calendar"> 
+                                Забронировать номер
+                            </button>
+                        </div>
+                        <img src="/img/png/advantages-image-1.png" alt="Advantage 1" class="advantages-slide__image">
+                    </div>
+                    <div class="swiper-slide advantages-slide">
+                        <div class="advantages-slide__content">
+                            <h2>Морской климат пойдет вам на пользу</h2>
+                            <p>Морской воздух оказывает положительное воздействие на здоровье. Он способен облегчить симптомы заболеваний и укрепить иммунную систему.</p>
+                            <button>
+                                <img src="/img/svg/advantages-icon.svg" alt="Calendar">
+                                Забронировать номер
+                            </button>
+                        </div>
+                        <img src="/img/png/advantages-image-1.png" alt="Advantage 1" class="advantages-slide__image">
+                    </div>
+                    <div class="swiper-slide advantages-slide">
+                        <div class="advantages-slide__content">
+                            <h2>Морской климат пойдет вам на пользу</h2>
+                            <p>Морской воздух оказывает положительное воздействие на здоровье. Он способен облегчить симптомы заболеваний и укрепить иммунную систему.</p>
+                            <button>
+                                <img src="/img/svg/advantages-icon.svg" alt="Calendar">
+                                Забронировать номер
+                            </button>
+                        </div>
+                        <img src="/img/png/advantages-image-1.png" alt="Advantage 1" class="advantages-slide__image">
+                    </div>
+                    <div class="swiper-slide advantages-slide">
+                        <div class="advantages-slide__content">
+                            <h2>Морской климат пойдет вам на пользу</h2>
+                            <p>Морской воздух оказывает положительное воздействие на здоровье. Он способен облегчить симптомы заболеваний и укрепить иммунную систему.</p>
+                            <button>
+                                <img src="/img/svg/advantages-icon.svg" alt="Calendar">
+                                Забронировать номер
+                            </button>
+                        </div>
+                        <img src="/img/png/advantages-image-1.png" alt="Advantage 1" class="advantages-slide__image">
+                    </div>
+                </div>
+                <div class="swiper-pagination advantages-pagination"></div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Entertainment Section -->
+    <section class="entertainment" id="entertainment">
+        <div class="entertainment__container">
+            <h2 class="entertainment__title">Геленджик — это маленький, но невероятно
+                уютный <img src="/img/svg/ice-cream.svg" alt="Ice cream" class="entertainment__icon"> городок, окруженный морем, горами,
+                на которых раскинулись <img src="/img/svg/summer-holidays.svg" alt="Summer holidays" class="entertainment__icon"> зеленые леса</h2>
+        </div>
+    </section>
+    
+    <section class="attractions" id="attractions">
+        <div class="attractions__container">
+            <!-- Desktop slider -->
+            <div class="attraction-slider attraction-slider--desktop">
+                <div class="attraction-slider-top">
+                    <div class="fine__blur fine__blur--left"></div>
+                    <div class="fine__blur fine__blur--right"></div>
+                    <div class="swiper attraction-swiper-top">
+                        <div class="swiper-wrapper">
+                            <div class="swiper-slide attraction-grid">
+                                <div class="attraction-item">
+                                    <div class="attraction-item__img">
+                                        <img src="https://xn----7sbfo4ajeedkpo6k.xn--p1ai/uploads/attraction/compress/1.png" alt="Атмосферный Сафари-Парк">
+                                    </div>
+                                    <div class="attraction-item__content">
+                                        <div>Атмосферный Сафари-Парк</div>
+                                    </div>
+                                </div>
+                                <div class="attraction-item">
+                                    <div class="attraction-item__img">
+                                        <img src="https://xn----7sbfo4ajeedkpo6k.xn--p1ai/uploads/attraction/compress/2.png" alt="Канатная дорога на смотровую площадку">
+                                    </div>
+                                    <div class="attraction-item__content">
+                                        <div>Канатная дорога на смотровую площадку</div>
+                                    </div>
+                                </div>
+                                <div class="attraction-item">
+                                    <div class="attraction-item__img">
+                                        <img src="https://xn----7sbfo4ajeedkpo6k.xn--p1ai/uploads/attraction/compress/3.png" alt="Конные прогулки в Прасковеевке">
+                                    </div>
+                                    <div class="attraction-item__content">
+                                        <div>Конные прогулки в Прасковеевке</div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="swiper-slide attraction-grid">
+                                <div class="attraction-item">
+                                    <div class="attraction-item__img">
+                                        <img src="https://xn----7sbfo4ajeedkpo6k.xn--p1ai/uploads/attraction/compress/4.png" alt="Старинный створный маяк">
+                                    </div>
+                                    <div class="attraction-item__content">
+                                        <div>Старинный створный маяк</div>
+                                    </div>
+                                </div>
+                                <div class="attraction-item">
+                                    <div class="attraction-item__img">
+                                        <img src="https://xn----7sbfo4ajeedkpo6k.xn--p1ai/uploads/attraction/compress/5.png" alt="Водопады на реке Жане">
+                                    </div>
+                                    <div class="attraction-item__content">
+                                        <div>Водопады на реке Жане</div>
+                                    </div>
+                                </div>
+                                <div class="attraction-item">
+                                    <div class="attraction-item__img">
+                                        <img src="https://xn----7sbfo4ajeedkpo6k.xn--p1ai/uploads/attraction/compress/6.png" alt="Колесо обозрения на высоте 640 м.">
+                                    </div>
+                                    <div class="attraction-item__content">
+                                        <div>Колесо обозрения на высоте 640 м.</div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="swiper-slide attraction-grid">
+                                <div class="attraction-item">
+                                    <div class="attraction-item__img">
+                                        <img src="https://xn----7sbfo4ajeedkpo6k.xn--p1ai/uploads/attraction/compress/7.png" alt="Дикий пляж «Сосновка»">
+                                    </div>
+                                    <div class="attraction-item__content">
+                                        <div>Дикий пляж «Сосновка»</div>
+                                    </div>
+                                </div>
+                                <div class="attraction-item">
+                                    <div class="attraction-item__img">
+                                        <img src="https://xn----7sbfo4ajeedkpo6k.xn--p1ai/uploads/attraction/compress/8.png" alt="Прогулки на квадроциклах">
+                                    </div>
+                                    <div class="attraction-item__content">
+                                        <div>Прогулки на квадроциклах</div>
+                                    </div>
+                                </div>
+                                <div class="attraction-item">
+                                    <div class="attraction-item__img">
+                                        <img src="https://xn----7sbfo4ajeedkpo6k.xn--p1ai/uploads/attraction/compress/9.png" alt="Парк аттракционов">
+                                    </div>
+                                    <div class="attraction-item__content">
+                                        <div>Парк аттракционов</div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="swiper-slide attraction-grid">
+                                <div class="attraction-item">
+                                    <div class="attraction-item__img">
+                                        <img src="https://xn----7sbfo4ajeedkpo6k.xn--p1ai/uploads/attraction/compress/10.png" alt="Джиппинг к водопадам">
+                                    </div>
+                                    <div class="attraction-item__content">
+                                        <div>Джиппинг к водопадам</div>
+                                    </div>
+                                </div>
+                                <div class="attraction-item">
+                                    <div class="attraction-item__img">
+                                        <img src="https://xn----7sbfo4ajeedkpo6k.xn--p1ai/uploads/attraction/compress/11.png" alt="Экскурсии на Абрау-Дюрсо">
+                                    </div>
+                                    <div class="attraction-item__content">
+                                        <div>Экскурсии на Абрау-Дюрсо</div>
+                                    </div>
+                                </div>
+                                <div class="attraction-item">
+                                    <div class="attraction-item__img">
+                                        <img src="https://xn----7sbfo4ajeedkpo6k.xn--p1ai/uploads/attraction/compress/12.png" alt="Кабардинка и сухогруз RIO">
+                                    </div>
+                                    <div class="attraction-item__content">
+                                        <div>Кабардинка и сухогруз RIO</div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="swiper-slide attraction-grid">
+                                <div class="attraction-item">
+                                    <div class="attraction-item__img">
+                                        <img src="https://xn----7sbfo4ajeedkpo6k.xn--p1ai/uploads/attraction/compress/13.png" alt="Сапсёрфинг по морю">
+                                    </div>
+                                    <div class="attraction-item__content">
+                                        <div>Сапсёрфинг по морю</div>
+                                    </div>
+                                </div>
+                                <div class="attraction-item">
+                                    <div class="attraction-item__img">
+                                        <img src="https://xn----7sbfo4ajeedkpo6k.xn--p1ai/uploads/attraction/compress/14.png" alt="Разнообразные рестораны">
+                                    </div>
+                                    <div class="attraction-item__content">
+                                        <div>Разнообразные рестораны</div>
+                                    </div>
+                                </div>
+                                <div class="attraction-item">
+                                    <div class="attraction-item__img">
+                                        <img src="https://xn----7sbfo4ajeedkpo6k.xn--p1ai/uploads/attraction/compress/15.png" alt="Ночные клубы">
+                                    </div>
+                                    <div class="attraction-item__content">
+                                        <div>Ночные клубы</div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="attraction-slider-bottom">
+                    <div class="fine__blur fine__blur--left"></div>
+                    <div class="fine__blur fine__blur--right"></div>
+                    <div class="swiper attraction-swiper-bottom">
+                        <div class="swiper-wrapper">
+                            <div class="swiper-slide attraction-grid">
+                                <div class="attraction-item attraction-item--lg">
+                                    <div class="attraction-item__img">
+                                        <img src="https://xn----7sbfo4ajeedkpo6k.xn--p1ai/uploads/attraction/compress/16.png" alt="Самый большой в России аквапарк «Золотая бухта»">
+                                    </div>
+                                    <div class="attraction-item__content">
+                                        <div>Самый большой в России аквапарк «Золотая бухта»</div>
+                                    </div>
+                                </div>
+                                <div class="attraction-item--sm--groups">
+                                    <div class="attraction-item attraction-item--sm">
+                                        <div class="attraction-item__img">
+                                            <img src="https://xn----7sbfo4ajeedkpo6k.xn--p1ai/uploads/attraction/compress/17.png" alt="Старый парк в Кабардинке">
+                                        </div>
+                                        <div class="attraction-item__content">
+                                            <div>Старый парк в Кабардинке</div>
+                                        </div>
+                                    </div>
+                                    <div class="attraction-item attraction-item--sm">
+                                        <div class="attraction-item__img">
+                                            <img src="https://xn----7sbfo4ajeedkpo6k.xn--p1ai/uploads/attraction/compress/18.png" alt="Эффектный дельфинарий">
+                                        </div>
+                                        <div class="attraction-item__content">
+                                            <div>Эффектный дельфинарий</div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="swiper-slide attraction-grid">
+                                <div class="attraction-item attraction-item--lg">
+                                    <div class="attraction-item__img">
+                                        <img src="https://xn----7sbfo4ajeedkpo6k.xn--p1ai/uploads/attraction/compress/19.png" alt="Джанхотский бор пицундской сосны">
+                                    </div>
+                                    <div class="attraction-item__content">
+                                        <div>Джанхотский бор пицундской сосны</div>
+                                    </div>
+                                </div>
+                                <div class="attraction-item--sm--groups">
+                                    <div class="attraction-item attraction-item--sm">
+                                        <div class="attraction-item__img">
+                                            <img src="https://xn----7sbfo4ajeedkpo6k.xn--p1ai/uploads/attraction/compress/20.png" alt="Красочный океанариум">
+                                        </div>
+                                        <div class="attraction-item__content">
+                                            <div>Красочный океанариум</div>
+                                        </div>
+                                    </div>
+                                    <div class="attraction-item attraction-item--sm">
+                                        <div class="attraction-item__img">
+                                            <img src="https://xn----7sbfo4ajeedkpo6k.xn--p1ai/uploads/attraction/compress/21.png" alt="Парк «Олимп»">
+                                        </div>
+                                        <div class="attraction-item__content">
+                                            <div>Парк «Олимп»</div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="swiper-slide attraction-grid">
+                                <div class="attraction-item attraction-item--lg">
+                                    <div class="attraction-item__img">
+                                        <img src="https://xn----7sbfo4ajeedkpo6k.xn--p1ai/uploads/attraction/compress/22.png" alt="Экстримальные катания на флайдбордах">
+                                    </div>
+                                    <div class="attraction-item__content">
+                                        <div>Экстримальные катания на флайдбордах</div>
+                                    </div>
+                                </div>
+                                <div class="attraction-item--sm--groups">
+                                    <div class="attraction-item attraction-item--sm">
+                                        <div class="attraction-item__img">
+                                            <img src="https://xn----7sbfo4ajeedkpo6k.xn--p1ai/uploads/attraction/compress/23.png" alt="Парк динозавров">
+                                        </div>
+                                        <div class="attraction-item__content">
+                                            <div>Парк динозавров</div>
+                                        </div>
+                                    </div>
+                                    <div class="attraction-item attraction-item--sm">
+                                        <div class="attraction-item__img">
+                                            <img src="https://xn----7sbfo4ajeedkpo6k.xn--p1ai/uploads/attraction/compress/24.png" alt="Древние дольмены">
+                                        </div>
+                                        <div class="attraction-item__content">
+                                            <div>Древние дольмены</div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="swiper-slide attraction-grid">
+                                <div class="attraction-item attraction-item--lg">
+                                    <div class="attraction-item__img">
+                                        <img src="https://xn----7sbfo4ajeedkpo6k.xn--p1ai/uploads/attraction/compress/25.png" alt="Завораживающий шоу-парк">
+                                    </div>
+                                    <div class="attraction-item__content">
+                                        <div>Завораживающий шоу-парк</div>
+                                    </div>
+                                </div>
+                                <div class="attraction-item--sm--groups">
+                                    <div class="attraction-item attraction-item--sm">
+                                        <div class="attraction-item__img">
+                                            <img src="https://xn----7sbfo4ajeedkpo6k.xn--p1ai/uploads/attraction/compress/26.png" alt="Морские прогулки">
+                                        </div>
+                                        <div class="attraction-item__content">
+                                            <div>Морские прогулки</div>
+                                        </div>
+                                    </div>
+                                    <div class="attraction-item attraction-item--sm">
+                                        <div class="attraction-item__img">
+                                            <img src="https://xn----7sbfo4ajeedkpo6k.xn--p1ai/uploads/attraction/compress/27.png" alt="Дайвинг с инструктором">
+                                        </div>
+                                        <div class="attraction-item__content">
+                                            <div>Дайвинг с инструктором</div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="swiper-slide attraction-grid">
+                                <div class="attraction-item attraction-item--lg">
+                                    <div class="attraction-item__img">
+                                        <img src="https://xn----7sbfo4ajeedkpo6k.xn--p1ai/uploads/attraction/compress/28.png" alt="Клуб виртуальной реальности">
+                                    </div>
+                                    <div class="attraction-item__content">
+                                        <div>Клуб виртуальной реальности</div>
+                                    </div>
+                                </div>
+                                <div class="attraction-item--sm--groups">
+                                    <div class="attraction-item attraction-item--sm">
+                                        <div class="attraction-item__img">
+                                            <img src="https://xn----7sbfo4ajeedkpo6k.xn--p1ai/uploads/attraction/compress/29.png" alt="Увлекательные квесты">
+                                        </div>
+                                        <div class="attraction-item__content">
+                                            <div>Увлекательные квесты</div>
+                                        </div>
+                                    </div>
+                                    <div class="attraction-item attraction-item--sm">
+                                        <div class="attraction-item__img">
+                                            <img src="https://xn----7sbfo4ajeedkpo6k.xn--p1ai/uploads/attraction/compress/30.png" alt="Динамичный пейнтбол">
+                                        </div>
+                                        <div class="attraction-item__content">
+                                            <div>Динамичный пейнтбол</div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <!-- Mobile grid - генерируется через lodash из массива attractionsData -->
+            <div class="attractions__grid attractions__grid--mobile">
+                <% _.forEach(attractionsData, function(item, index) { %>
+                <div class="attractions__grid-item attractions__grid-item--single<%= index >= attractionsMobileVisible ? ' attractions__grid-item--hidden' : '' %>">
+                    <div class="attraction-item">
+                        <div class="attraction-item__img">
+                            <img src="<%= item.img %>" alt="<%= item.title %>">
+                        </div>
+                        <div class="attraction-item__content">
+                            <div><%= item.title %></div>
+                        </div>
+                    </div>
+                </div>
+                <% }); %>
+            </div>
+            <div class="attractions__more-wrapper">
+                <button class="attractions__more-btn" id="attractionsMoreBtn">Еще фото</button>
+            </div>
+        </div>
+    </section>
+
+    <%= footer %>
+
+    <!-- Cookie Banner -->
+    <div class="cookie-banner" id="cookieBanner">
+        <div class="cookie-banner__content">
+            <p class="cookie-banner__text">
+                Этот веб-сайт использует файлы cookie, чтобы обеспечить удобную работу пользователей с ним и функциональные
+                возможности сайта. Продолжая использовать этот сайт, Вы соглашаетесь с использованием файлов cookie
+            </p>
+            <button class="cookie-banner__btn" id="cookieAcceptBtn">Принять</button>
+        </div>
+    </div>
+
+    <!-- Modals are now loaded via Fancybox from /dialogs/ directory -->
+
+    <script src="./js/main.js"></script>
+</body>
+
+</html>

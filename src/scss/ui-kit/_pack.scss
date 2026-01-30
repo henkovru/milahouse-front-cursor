@@ -1,0 +1,25 @@
+@layer components {
+  .pack {
+    position: relative;
+    width: 100%;
+    overflow: hidden;
+
+    &-image {
+      @apply image;
+    }
+
+    &[class*="pack-["] {
+      @apply relative;
+      
+      &::before {
+        content: '';
+        display: block;
+        padding-bottom: var(--pack-ratio, 56.25%);
+      }
+    }
+  }
+  
+  .pack[class*="pack-[65"]::before {
+    padding-bottom: 65%;
+  }
+}

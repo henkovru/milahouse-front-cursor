@@ -1,0 +1,13 @@
+@layer components {
+  .card {
+    @apply flex flex-col relative bg-white rounded-4xl overflow-hidden h-full;
+
+    @screen sm {
+      @apply rounded-5xl;
+    }
+
+    &-content {
+      @apply flex flex-col grow;
+    }
+  }
+}

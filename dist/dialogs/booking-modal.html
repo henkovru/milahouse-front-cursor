@@ -1,0 +1,58 @@
+<div class="modal__content">
+    <!-- Кнопка закрытия предоставляется Fancybox -->
+    <h2 class="modal__title">ЗАБРОНИРОВАТЬ НОМЕР</h2>
+    <form class="modal__form" id="bookingForm">
+        <div class="modal__form-group">
+            <label for="bookingName" class="modal__label">Ваше имя</label>
+            <div class="modal__input-wrapper">
+                <input type="text" id="bookingName" name="name" class="modal__input" pattern="[A-Za-zА-Яа-яЁё\s-]+" required>
+            </div>
+        </div>
+        <div class="modal__form-group">
+            <label for="bookingPhone" class="modal__label">Ваш телефон</label>
+            <div class="modal__input-wrapper">
+                <input type="tel" id="bookingPhone" name="phone" class="modal__input" placeholder="+7 (___) ___-__-__" minlength="18" maxlength="18" pattern="\+7 \(\d{3}\) \d{3}-\d{2}-\d{2}" required>
+            </div>
+        </div>
+        <div class="modal__form-group">
+            <label for="bookingCheckin" class="modal__label">Заезд</label>
+            <div class="modal__input-wrapper">
+                <input type="text" id="bookingCheckin" name="checkin" class="modal__input" readonly="readonly" required>
+                <button type="button" class="modal__input-icon-btn">
+                    <img src="/img/svg/icon-calendar-booking.svg" alt="Календарь" class="modal__input-icon">
+                </button>
+            </div>
+        </div>
+        <div class="modal__form-group">
+            <label for="bookingCheckout" class="modal__label">Отъезд</label>
+            <div class="modal__input-wrapper">
+                <input type="text" id="bookingCheckout" name="checkout" class="modal__input" readonly="readonly" required>
+                <button type="button" class="modal__input-icon-btn">
+                    <img src="/img/svg/icon-calendar-booking.svg" alt="Календарь" class="modal__input-icon">
+                </button>
+            </div>
+        </div>
+        <div class="modal__form-counters">
+            <div class="modal__form-counter-group">
+                <label class="modal__label">Взрослые</label>
+                <div class="modal__counter">
+                    <button type="button" class="modal__counter-btn modal__counter-btn--minus" data-counter-minus>-</button>
+                    <input type="number" class="modal__counter-value" data-counter-value value="2" min="0" max="15" step="1">
+                    <button type="button" class="modal__counter-btn modal__counter-btn--plus" data-counter-plus>+</button>
+                </div>
+            </div>
+            <div class="modal__form-counter-group">
+                <label class="modal__label">Дети до 7 лет</label>
+                <div class="modal__counter">
+                    <button type="button" class="modal__counter-btn modal__counter-btn--minus" data-counter-minus>-</button>
+                    <input type="number" class="modal__counter-value" data-counter-value value="0" min="0" max="15" step="1">
+                    <button type="button" class="modal__counter-btn modal__counter-btn--plus" data-counter-plus>+</button>
+                </div>
+            </div>
+        </div>
+        <div class="modal__form-actions">
+            <button type="submit" class="modal__submit">Отправить заявку</button>
+            <button type="button" class="modal__consent" data-consent-open>Отправляя форму Вы даете согласие на обработку Ваших персональных данных</button>
+        </div>
+    </form>
+</div>

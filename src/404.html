@@ -1,0 +1,41 @@
+<%
+  var _ = require('lodash');
+  var header = _.template(require('./includes/header.html').default)();
+  var footer = _.template(require('./includes/footer.html').default)();
+%>
+<!DOCTYPE html>
+<html lang="ru">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>MilaHouse - Страница не найдена</title>
+    <link rel="icon" type="image/svg+xml" href="/img/svg/logo.svg">
+</head>
+
+<body class="bg-grey font-base text-black">
+    <div class="preloader" id="sitePreloader" aria-hidden="true">
+        <img src="/img/svg/logo.svg" alt="" class="preloader__logo">
+    </div>
+    
+    <%= header %>
+
+
+        <section class="not-found">
+            <div class="not-found__container">
+                <img src="/img/svg/404.svg" alt="Страница не найдена" class="not-found__image">
+                <p class="not-found__text">
+                    Возможно, запрашиваемая Вами страница была перенесена или удалена.
+                    Либо Вы допустили небольшую опечатку при вводе адреса.
+                </p>
+                <button type="button" class="not-found__btn" id="notFoundBack">Вернуться назад</button>
+            </div>
+        </section>
+
+
+    <%= footer %>
+
+    <script src="./js/main.js"></script>
+</body>
+
+</html>

@@ -1,0 +1,363 @@
+/* ================================================
+   AIR DATEPICKER - ЕДИНЫЕ СТИЛИ ДЛЯ ВСЕХ КАЛЕНДАРЕЙ
+   Применяются к:
+   - Выпадающему календарю в Hero форме (заезд/отъезд)
+   - Календарю в модальном окне номера
+   - Календарю в админ панели
+   
+   ВАЖНО: Эти стили НЕ в @layer, чтобы иметь приоритет 
+   над оригинальными стилями библиотеки air-datepicker
+   ================================================ */
+
+/* Основной контейнер календаря */
+.air-datepicker {
+  border-radius: 14px !important;
+  padding: 16px !important;
+  display: block;
+  font-family: var(--font-base) !important;
+  box-sizing: border-box !important;
+  border: 1px solid #D1D7E0 !important;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08) !important;
+  background: #FFFFFF !important;
+}
+
+/* Inline календарь (встроенный в модальное окно) */
+.air-datepicker--inline {
+  border: 1px solid #D1D7E0 !important;
+  box-shadow: none !important;
+}
+
+/* ================================================
+   НАВИГАЦИЯ КАЛЕНДАРЯ (шапка с месяцем/годом)
+   ================================================ */
+.air-datepicker--navigation {
+  border: none !important;
+  border-top: none !important;
+  border-bottom: none !important;
+}
+
+.air-datepicker-nav {
+  border: none !important;
+  border-top: none !important;
+  border-bottom: none !important;
+  padding: 12px 16px !important;
+  background-color: #FFFFFF !important;
+}
+
+.air-datepicker-nav--title {
+  font-family: var(--font-base) !important;
+  font-size: 1rem !important;
+  font-weight: 600 !important;
+  color: #322E2F !important;
+}
+
+.air-datepicker-nav--action {
+  color: #322E2F !important;
+  border-radius: 8px !important;
+  width: 32px !important;
+  height: 32px !important;
+  border: none !important;
+}
+
+.air-datepicker-nav--action:hover {
+  background-color: rgba(248, 110, 62, 0.1) !important;
+}
+
+/* ================================================
+   ТЕЛО КАЛЕНДАРЯ (область с датами)
+   ================================================ */
+.air-datepicker-body {
+  padding: 0 !important;
+  border: none !important;
+  border-top: none !important;
+  border-bottom: none !important;
+}
+
+/* Названия дней недели (Пн, Вт, Ср...) */
+.air-datepicker-body--day-names {
+  margin: 0 !important;
+  padding: 8px 0 !important;
+  border: none !important;
+  border-top: none !important;
+  border-bottom: none !important;
+}
+
+.air-datepicker-body--day-name {
+  font-family: var(--font-base) !important;
+  color: #322E2F !important;
+  opacity: 0.6 !important;
+  font-weight: 600 !important;
+  text-transform: uppercase !important;
+  font-size: 0.75rem !important;
+  border: none !important;
+}
+
+/* Контейнер с ячейками дат */
+.air-datepicker-body--cells {
+  border: none !important;
+  border-top: none !important;
+  border-bottom: none !important;
+}
+
+.air-datepicker-body--cells.-days-,
+.air-datepicker-body--cells.-months-,
+.air-datepicker-body--cells.-years- {
+  border: none !important;
+  border-top: none !important;
+  border-bottom: none !important;
+}
+
+/* ================================================
+   КНОПКИ КАЛЕНДАРЯ (Очистить, Выбрать и т.д.)
+   ================================================ */
+.air-datepicker--buttons {
+  border: none !important;
+  border-top: none !important;
+  border-bottom: none !important;
+  padding: 12px 16px 0 16px !important;
+}
+
+.air-datepicker-button {
+  color: #FFFFFF !important;
+  background-color: #F86E3E !important;
+  border-radius: 14px !important;
+  font-weight: 600 !important;
+  padding: 12px 24px !important;
+  font-family: var(--font-base) !important;
+  font-size: 14px !important;
+  height: 46px !important;
+  border: none !important;
+  cursor: pointer !important;
+  transition: 0.3s ease !important;
+  flex: 1 !important;
+}
+
+.air-datepicker-button:hover {
+  background-color: #E84E18 !important;
+}
+
+/* ================================================
+   ЯЧЕЙКИ КАЛЕНДАРЯ (даты, месяцы, годы)
+   ================================================ */
+
+/* Базовая ячейка */
+.air-datepicker-cell {
+  border-radius: 8px !important;
+  font-family: var(--font-base) !important;
+  color: #322E2F !important;
+  border: none !important;
+  border-top: none !important;
+  border-bottom: none !important;
+  border-left: none !important;
+  border-right: none !important;
+  height: 32px !important;
+}
+
+.air-datepicker-cell.-day- {
+  border: none !important;
+  border-top: none !important;
+  border-bottom: none !important;
+}
+
+/* Ячейка в фокусе (hover) */
+.air-datepicker-cell.-focus- {
+  background: rgba(248, 110, 62, 0.1) !important;
+  border-radius: 8px !important;
+  border: none !important;
+  border-top: none !important;
+  border-bottom: none !important;
+}
+
+/* Выбранная дата */
+.air-datepicker-cell.-selected- {
+  background-color: #F86E3E !important;
+  color: #FFFFFF !important;
+  border-radius: 8px !important;
+  border: none !important;
+  border-top: none !important;
+  border-bottom: none !important;
+}
+
+.air-datepicker-cell.-selected-.-focus- {
+  background: #F86E3E !important;
+  color: #FFFFFF !important;
+  border: none !important;
+}
+
+.air-datepicker-cell.-selected-.-current- {
+  background-color: #F86E3E !important;
+  color: #FFFFFF !important;
+  border: none !important;
+}
+
+/* Текущая дата (сегодня) */
+.air-datepicker-cell.-current- {
+  color: #F86E3E !important;
+  font-weight: 600 !important;
+  border: none !important;
+}
+
+.air-datepicker-cell.-current-.-focus- {
+  background: rgba(248, 110, 62, 0.1) !important;
+  border: none !important;
+}
+
+/* Неактивная дата */
+.air-datepicker-cell.-disabled- {
+  color: #AAAAAA !important;
+  cursor: default !important;
+  border: none !important;
+}
+
+/* ================================================
+   ДИАПАЗОН ДАТ (для выбора периода заезд-отъезд)
+   ================================================ */
+
+/* Даты внутри диапазона */
+.air-datepicker-cell.-in-range- {
+  background: rgba(248, 110, 62, 0.15) !important;
+  color: #322E2F !important;
+  border-radius: 0 !important;
+  border: none !important;
+  border-top: none !important;
+  border-bottom: none !important;
+}
+
+/* Начало диапазона */
+.air-datepicker-cell.-range-from- {
+  background: #F86E3E !important;
+  color: #FFFFFF !important;
+  border: none !important;
+  border-top: none !important;
+  border-bottom: none !important;
+  border-radius: 8px 0 0 8px !important;
+}
+
+/* Конец диапазона */
+.air-datepicker-cell.-range-to- {
+  background: #F86E3E !important;
+  border: none !important;
+  border-top: none !important;
+  border-bottom: none !important;
+  color: #FFFFFF !important;
+  border-radius: 0 8px 8px 0 !important;
+}
+
+/* Когда начало и конец - одна дата */
+.air-datepicker-cell.-range-from-.-range-to- {
+  background: #F86E3E !important;
+  border: none !important;
+  border-top: none !important;
+  border-bottom: none !important;
+  color: #FFFFFF !important;
+  border-radius: 8px !important;
+}
+
+/* Фокус на ячейке внутри диапазона */
+.air-datepicker-cell.-in-range-.-focus- {
+  background: rgba(248, 110, 62, 0.3) !important;
+  color: #322E2F !important;
+  border: none !important;
+}
+
+/* Hover эффект для ячеек */
+.air-datepicker-cell:hover:not(.-disabled-):not(.-selected-) {
+  background: rgba(248, 110, 62, 0.1) !important;
+  border: none !important;
+  color: #322E2F !important;
+}
+
+/* ================================================
+   СПЕЦИФИЧНЫЕ СТИЛИ ДЛЯ РАЗНЫХ КАЛЕНДАРЕЙ
+   ================================================ */
+
+/* Выпадающие календари (dropdown) */
+.date-picker-dropdown .air-datepicker {
+  position: absolute;
+  z-index: 100;
+  background: #FFFFFF !important;
+}
+
+/* Календари в Hero форме */
+#checkin-date-picker .air-datepicker,
+#checkout-date-picker .air-datepicker {
+  box-shadow: 0 6px 20px rgba(0, 0, 0, 0.12) !important;
+}
+
+/* ================================================
+   HERO DATE RANGE PICKER - РАСТЯНУТЫЙ НА ВСЮ ШИРИНУ
+   ================================================ */
+
+/* Сам календарь в hero - растянутый на всю ширину формы */
+.hero__form .air-datepicker {
+  width: 100% !important;
+  max-width: 100% !important;
+  border-radius: 14px !important;
+  margin-top: 8px !important;
+  left: 0 !important;
+  right: 0 !important;
+}
+
+/* Тело календаря с датами */
+.hero__form .air-datepicker-body {
+  padding: 16px !important;
+}
+
+/* Сетка дней - растянутая */
+.hero__form .air-datepicker-body--cells.-days- {
+  display: grid !important;
+  grid-template-columns: repeat(7, 1fr) !important;
+  gap: 4px !important;
+}
+
+/* Ячейки дней - квадратные и адаптивные */
+.hero__form .air-datepicker-cell.-day- {
+  width: 100% !important;
+  aspect-ratio: 1 !important;
+  display: flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  font-size: 1rem !important;
+}
+
+/* Названия дней недели */
+.hero__form .air-datepicker-body--day-names {
+  display: grid !important;
+  grid-template-columns: repeat(7, 1fr) !important;
+  gap: 4px !important;
+  padding: 8px 16px !important;
+}
+
+.hero__form .air-datepicker-body--day-name {
+  text-align: center !important;
+  font-size: 0.875rem !important;
+}
+
+/* Навигация календаря */
+.hero__form .air-datepicker-nav {
+  padding: 16px !important;
+}
+
+.hero__form .air-datepicker-nav--title {
+  font-size: 1.125rem !important;
+}
+
+/* Мобильная версия */
+@media (max-width: 768px) {
+  .hero__form .air-datepicker {
+    position: fixed !important;
+    left: 16px !important;
+    right: 16px !important;
+    top: 50% !important;
+    transform: translateY(-50%) !important;
+    width: calc(100% - 32px) !important;
+    max-height: 90vh !important;
+    overflow-y: auto !important;
+    z-index: 10000 !important;
+  }
+  
+  .hero__form .air-datepicker-cell.-day- {
+    font-size: 0.875rem !important;
+    min-height: 36px !important;
+  }
+}

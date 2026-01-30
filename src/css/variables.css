@@ -1,0 +1,81 @@
+:root {
+  /* Colors */
+  --color-white: #FFFFFF;
+  --color-dark: #322E2F;
+  --color-primary: #F86E3E;
+  --color-primary-dark: #E84E18;
+  --color-bg-light: #F3F4F6;
+  --color-bg-blue: #3A96B8;
+  --color-bg-light-blue: #B3DCDD;
+  --color-bg-light-green: #DEEAEA;
+  --color-border: #D1D7E0;
+  --color-text-secondary: rgba(50, 46, 47, 0.6);
+  --color-text-tertiary: rgba(50, 46, 47, 0.4);
+  --color-text-disabled: #AAAAAA;
+  --color-bg-yandex: #258FFB;
+  --color-bg-yandex-dark: #1B7BE4;
+  --color-bg-yellow: #FAE085;
+  --color-primary-light: rgba(248, 110, 62, 0.1);
+  --color-primary-medium: rgba(248, 110, 62, 0.4);
+  --color-error-light: rgba(220, 53, 69, 0.1);
+  /* Gradients */
+  --gradient-primary: linear-gradient(180deg, rgba(255, 255, 255, 1) 18%, rgba(255, 255, 255, 0.9) 100%);
+  --gradient-overlay: linear-gradient(180deg, rgba(0, 0, 0, 0) 0%, rgba(0, 0, 0, 1) 100%);
+  --gradient-blue: linear-gradient(90deg, rgba(179, 220, 221, 1) 0%, rgba(0, 0, 0, 0) 100%);
+  
+  /* Fonts */
+  --font-inter: 'Inter', sans-serif;
+  --font-oranienbaum: 'Oranienbaum', serif;
+  --font-playfair: 'Playfair Display', serif;
+  
+  /* Font Sizes */
+  --font-size-xs: 14px;
+  --font-size-sm: 16px;
+  --font-size-md: 24px;
+  --font-size-lg: 28px;
+  --font-size-xl: 32px;
+  --font-size-2xl: 48px;
+  --font-size-3xl: 56px;
+  
+  /* Spacing */
+  --spacing-xs: 8px;
+  --spacing-sm: 16px;
+  --spacing-md: 24px;
+  --spacing-lg: 32px;
+  --spacing-xl: 40px;
+  --spacing-2xl: 48px;
+  
+  /* Border Radius */
+  --radius-xs: 10px;
+  --radius-sm: 14px;
+  --radius-md: 24px;
+  --radius-lg: 40px;
+  --radius-32: 32px;
+  
+  /* Container */
+  --container-width: 1920px;
+  --container-padding: 384px;
+  
+  /* Transitions */
+  --transition-base: 0.3s ease;
+  
+  /* About Section */
+  --about-card-offset: -20px;
+  
+  /* Gallery Section */
+  --gallery-slider-height: 712px;
+  --gallery-slider-height-mobile: 400px;
+  --gallery-slide-width: 543px;
+  --gallery-slide-width-mobile: 280px;
+  --gallery-slide-gap: 16px;
+  --gallery-slide-spacing: 40px;
+  --gallery-slide-spacing-mobile: 20px;
+  --gallery-blur-width: 30%;
+  --gallery-blur-width-mobile: 100px;
+  --gallery-double-item-height: 47.5%;
+  --gallery-double-item-height-mobile: 192px;
+  --gallery-hover-translate: -4px;
+  --gallery-hover-scale: 1.05;
+  --gallery-blur-z-index: 1000;
+  --gallery-transition-slow: 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+}

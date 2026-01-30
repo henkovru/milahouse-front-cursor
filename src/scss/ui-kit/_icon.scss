@@ -1,0 +1,9 @@
+@layer components {
+  .icon {
+    width    : 1em;
+    min-width: 1em;
+    height   : 1em;
+
+    @apply block;
+  }
+}

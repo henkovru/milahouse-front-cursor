@@ -1,0 +1,24 @@
+<div class="modal modal--lead">
+    <div class="modal__content">
+        <!-- Кнопка закрытия предоставляется Fancybox -->
+        <h2 class="modal__title">УЗНАТЬ ЦЕНЫ И ПОЛУЧИТЬ СКИДКУ</h2>
+        <form class="modal__form" id="leadForm">
+            <div class="modal__form-group">
+                <label for="leadName" class="modal__label">Ваше имя</label>
+                <div class="modal__input-wrapper">
+                    <input type="text" id="leadName" name="name" class="modal__input" pattern="[A-Za-zА-Яа-яЁё\s-]+" required>
+                </div>
+            </div>
+            <div class="modal__form-group">
+                <label for="leadPhone" class="modal__label">Ваш телефон</label>
+                <div class="modal__input-wrapper">
+                    <input type="tel" id="leadPhone" name="phone" class="modal__input" placeholder="+7 (___) ___-__-__" minlength="18" maxlength="18" pattern="\+7 \(\d{3}\) \d{3}-\d{2}-\d{2}" required>
+                </div>
+            </div>
+            <div class="modal__form-actions">
+                <button type="submit" class="modal__submit">Отправить заявку</button>
+                <button type="button" class="modal__consent" data-consent-open>Отправляя форму Вы даете согласие на обработку Ваших персональных данных</button>
+            </div>
+        </form>
+    </div>
+</div>

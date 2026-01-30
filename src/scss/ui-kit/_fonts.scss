@@ -1,0 +1,36 @@
+@layer base {
+  @font-face {
+    font-family: "Inter";
+    font-weight: normal;
+    font-style : normal;
+    src        : url("../fonts/Inter/static/Inter_18pt-Regular.ttf") format("truetype");
+  }
+
+  @font-face {
+    font-family: "Inter";
+    font-weight: 500;
+    font-style : normal;
+    src        : url("../fonts/Inter/static/Inter_18pt-Medium.ttf") format("truetype");
+  }
+
+  @font-face {
+    font-family: "Inter";
+    font-weight: 600;
+    font-style : normal;
+    src        : url("../fonts/Inter/static/Inter_18pt-SemiBold.ttf") format("truetype");
+  }
+
+  @font-face {
+    font-family: "Inter";
+    font-weight: bold;
+    font-style : normal;
+    src        : url("../fonts/Inter/static/Inter_18pt-Bold.ttf") format("truetype");
+  }
+
+  @font-face {
+    font-family: "Oranienbaum";
+    font-weight: normal;
+    font-style : normal;
+    src        : url("../fonts/Oranienbaum/Oranienbaum-Regular.ttf") format("truetype");
+  }
+}

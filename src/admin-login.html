@@ -1,0 +1,47 @@
+<%
+  var _ = require('lodash');
+  var header = _.template(require('./includes/header.html').default)();
+  var footer = _.template(require('./includes/footer.html').default)();
+%>
+<!DOCTYPE html>
+<html lang="ru">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>MilaHouse - Вход в админку</title>
+    <link rel="icon" type="image/svg+xml" href="/img/svg/logo.svg">
+</head>
+
+<body class="bg-grey font-base text-black">
+    <div class="preloader" id="sitePreloader" aria-hidden="true">
+        <img src="/img/svg/logo.svg" alt="" class="preloader__logo">
+    </div>
+    
+    <%= header %>
+
+    <main class="main">
+        <section class="admin-login">
+            <div class="admin__container">
+                <div class="admin-login__card">
+                    <h1 class="admin-login__title">Вход</h1>
+                    <form class="admin-login__form">
+                        <label class="admin-login__field">
+                            <span class="admin-login__label">Имя</span>
+                            <input type="text" class="admin-login__input" name="login" autocomplete="username">
+                        </label>
+                        <label class="admin-login__field">
+                            <span class="admin-login__label">Пароль</span>
+                            <input type="password" class="admin-login__input" name="password" autocomplete="current-password">
+                        </label>
+                        <button type="submit" class="admin-login__submit">Войти</button>
+                    </form>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <%= footer %>
+</body>
+
+</html>

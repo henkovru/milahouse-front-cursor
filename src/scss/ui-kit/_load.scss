@@ -1,0 +1,42 @@
+@layer components {
+  @keyframes progress {
+    to {
+      rotate: 360deg;
+    }
+  }
+
+  @keyframes loader {
+    0% {
+      stroke: {
+        dasharray : 1px, 200px;
+        dashoffset: 0;
+      }
+    }
+
+    50% {
+      stroke: {
+        dasharray : 100px, 200px;
+        dashoffset: -15px;
+      }
+    }
+
+    100% {
+      stroke: {
+        dasharray : 100px, 200px;
+        dashoffset: -125px;
+      }
+    }
+  }
+
+  .loader {
+    @apply flex items-center justify-center absolute inset-0 text-primary text-4xl pointer-events-none;
+
+    &-progress {
+      animation: progress 1800ms linear infinite;
+    }
+
+    &-icon {
+      animation: loader 1500ms ease-in-out infinite;
+    }
+  }
+}

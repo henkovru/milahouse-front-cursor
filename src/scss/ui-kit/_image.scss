@@ -1,0 +1,5 @@
+@layer components {
+  .image {
+    @apply absolute inset-0 max-w-none size-full object-cover;
+  }
+}

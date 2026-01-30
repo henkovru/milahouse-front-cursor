@@ -1,0 +1,204 @@
+<%
+  var _ = require('lodash');
+  var header = _.template(require('./includes/header.html').default)();
+  var footer = _.template(require('./includes/footer.html').default)();
+%>
+<!DOCTYPE html>
+<html lang="ru">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>MilaHouse - Админка</title>
+    <link rel="icon" type="image/svg+xml" href="/img/svg/logo.svg">
+</head>
+
+<body class="bg-grey font-base text-black">
+    <div class="preloader" id="sitePreloader" aria-hidden="true">
+        <img src="/img/svg/logo.svg" alt="" class="preloader__logo">
+    </div>
+    
+    <%= header %>
+
+    <main class="admin">
+        <section class="admin__section admin__section--create">
+            <div class="admin__container">
+                <div class="admin__top">
+                    <button type="button" class="admin__back" id="adminBack" aria-label="Назад" onclick="history.back()">
+                        <svg viewBox="0 0 24 24" fill="none" aria-hidden="true">
+                            <path d="M15 19L8 12L15 5" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/>
+                        </svg>
+                    </button>
+                    <h1 class="admin__title">Добавить бронь</h1>
+                </div>
+
+                <!-- 
+                  Формат данных для бэкендера:
+                  data-bookings - JSON массив всех бронирований
+                  Формат объекта: {"checkin":"YYYY-MM-DD","checkout":"YYYY-MM-DD","roomId":"N","guest":"Имя","city":"Город","guests":"3","price":"45000","comment":"Комментарий"}
+                -->
+                <form class="admin-form" id="adminBookingForm" autocomplete="off" data-bookings='[{"checkin":"2026-02-15","checkout":"2026-02-20","roomId":"1","guest":"Константин","city":"Новороссийск","guests":"3","price":"45000","comment":"Переписка в личном чате"}]'>
+                    <div class="admin-form__grid">
+                        <label class="admin-field admin-field--name">
+                            <span class="admin-field__label">Ваше имя <span class="admin-field__required">*</span></span>
+                            <input class="admin-field__input" name="guest" placeholder="Иванов Иван" pattern="[A-Za-zА-Яа-яЁё\s-]+" required>
+                        </label>
+
+                        <label class="admin-field admin-field--phone">
+                            <span class="admin-field__label">Ваш телефон <span class="admin-field__required">*</span></span>
+                            <input type="tel" class="admin-field__input" id="adminPhone" name="phone" placeholder="+7 (___) ___-__-__" minlength="18" maxlength="18" pattern="\+7 \(\d{3}\) \d{3}-\d{2}-\d{2}" required>
+                        </label>
+
+                        <label class="admin-field admin-field--checkin">
+                            <span class="admin-field__label">Заезд <span class="admin-field__required">*</span></span>
+                            <div class="admin-field__input-wrapper">
+                                <input class="admin-field__input" id="adminCheckin" name="checkin" data-admin-checkin placeholder="дд.мм.гггг" inputmode="numeric" required>
+                                <button type="button" class="admin-field__icon-btn" id="adminCheckinBtn" aria-label="Открыть календарь">
+                                    <img src="/img/svg/icon-calendar-booking.svg" alt="">
+                                </button>
+                            </div>
+                        </label>
+
+                        <label class="admin-field admin-field--checkout">
+                            <span class="admin-field__label">Отъезд <span class="admin-field__required">*</span></span>
+                            <div class="admin-field__input-wrapper">
+                                <input class="admin-field__input" id="adminCheckout" name="checkout" data-admin-checkout placeholder="дд.мм.гггг" inputmode="numeric" required>
+                                <button type="button" class="admin-field__icon-btn" id="adminCheckoutBtn" aria-label="Открыть календарь">
+                                    <img src="/img/svg/icon-calendar-booking.svg" alt="">
+                                </button>
+                            </div>
+                        </label>
+
+                        <label class="admin-field admin-field--days">
+                            <span class="admin-field__label">Дней</span>
+                            <div class="admin-field__days-value" data-admin-days>0</div>
+                        </label>
+
+                        <div class="admin-field admin-field--room admin-select" data-admin-select>
+                            <span class="admin-field__label">Комната <span class="admin-field__required">*</span></span>
+                            <button type="button" class="admin-select__control" aria-haspopup="listbox" aria-expanded="false">
+                                <span class="admin-select__value" data-admin-select-value>Номер 1</span>
+                                <svg class="admin-select__icon" viewBox="0 0 24 24" aria-hidden="true">
+                                    <path d="M6 9L12 15L18 9" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                                </svg>
+                            </button>
+                            <ul class="admin-select__list" role="listbox">
+                                <li class="admin-select__option" role="option" data-value="1">Номер 1</li>
+                                <li class="admin-select__option" role="option" data-value="2">Номер 2</li>
+                                <li class="admin-select__option" role="option" data-value="3">Номер 3</li>
+                                <li class="admin-select__option" role="option" data-value="4">Номер 4</li>
+                                <li class="admin-select__option" role="option" data-value="5">Номер 5</li>
+                            </ul>
+                            <input type="hidden" name="room" id="adminRoomInput" value="1" required>
+                        </div>
+
+                        <label class="admin-field admin-field--comment">
+                            <span class="admin-field__label">Комментарий</span>
+                            <textarea class="admin-field__textarea" name="comment" placeholder="Комментарий"></textarea>
+                        </label>
+
+                        <div class="admin-field admin-field--adults">
+                            <span class="admin-field__label">Взрослые</span>
+                            <div class="admin-counter" data-admin-counter data-min="0" data-value="2">
+                                <button type="button" class="admin-counter__btn" data-action="minus">-</button>
+                                <input type="number" class="admin-counter__value" name="adults" value="2" min="0" max="15" step="1">
+                                <button type="button" class="admin-counter__btn" data-action="plus">+</button>
+                            </div>
+                        </div>
+
+                        <div class="admin-field admin-field--children">
+                            <span class="admin-field__label">Дети до 7 лет</span>
+                            <div class="admin-counter" data-admin-counter data-min="0" data-value="0">
+                                <button type="button" class="admin-counter__btn" data-action="minus">-</button>
+                                <input type="number" class="admin-counter__value" name="children" value="0" min="0" max="15" step="1">
+                                <button type="button" class="admin-counter__btn" data-action="plus">+</button>
+                            </div>
+                        </div>
+
+                        <label class="admin-field admin-field--price">
+                            <span class="admin-field__label">Цена</span>
+                            <input class="admin-field__input" name="price" placeholder="4500">
+                        </label>
+                    </div>
+
+                    <div class="admin-form__actions">
+                        <button type="submit" class="admin-form__submit">Сохранить</button>
+                        <button type="button" class="admin-form__secondary">Изменить</button>
+                    </div>
+                </form>
+            </div>
+        </section>
+
+        <section class="admin__section admin__section--current">
+            <div class="admin__container">
+                <div class="admin__section-heading">
+                    <h2 class="admin__section-title">Текущие брони <span data-admin-year></span></h2>
+                </div>
+
+                <!--
+                  Табы номеров
+                  data-room-bookings - JSON массив бронирований для конкретного номера
+                  Формат: [{"checkin":"YYYY-MM-DD","checkout":"YYYY-MM-DD","roomId":"N","id":"123","guest":"Имя","city":"Город","guests":"3","price":"45000","comment":"Комментарий"}]
+                -->
+                <div class="admin-tabs" data-admin-tabs>
+                    <button type="button" class="admin-tabs__btn admin-tabs__btn--active" data-admin-room-tab data-room-id="1" data-room-bookings='[{"id":"431","checkin":"2026-07-18","checkout":"2026-07-19","roomId":"1","guest":"Константин","city":"Новороссийск","guests":"3","price":"45000","comment":"Переписка в личном чате"}]'>Номер 1</button>
+                    <button type="button" class="admin-tabs__btn" data-admin-room-tab data-room-id="2" data-room-bookings='[]'>Номер 2</button>
+                    <button type="button" class="admin-tabs__btn" data-admin-room-tab data-room-id="3" data-room-bookings='[]'>Номер 3</button>
+                    <button type="button" class="admin-tabs__btn" data-admin-room-tab data-room-id="4" data-room-bookings='[]'>Номер 4</button>
+                    <button type="button" class="admin-tabs__btn" data-admin-room-tab data-room-id="5" data-room-bookings='[]'>Номер 5</button>
+                </div>
+
+                <!--
+                  Календари генерируются динамически через JS
+                  Отображаются все 12 месяцев текущего года
+                  Забронированные даты подсвечиваются на основе data-room-bookings активного таба
+                -->
+                <div class="admin-calendars" data-admin-calendars>
+                    <!-- Календари будут сгенерированы JS -->
+                </div>
+
+                <div class="admin-table__wrapper">
+                    <div class="admin-table">
+                        <div class="admin-table__head">
+                            <span>ID</span>
+                            <span>Имя</span>
+                            <span>Город</span>
+                            <span>Заезд</span>
+                            <span>Выезд</span>
+                            <span>Кол-во чел</span>
+                            <span>Цена</span>
+                            <span>Комментарий админа</span>
+                            <span></span>
+                        </div>
+                        <div class="admin-table__body" data-admin-bookings-body>
+                            <!-- Строки таблицы генерируются динамически из data-room-bookings -->
+                        </div>
+                    </div>
+                </div>
+
+                <div class="admin-total">Итого: <span data-admin-total>0</span> ₽</div>
+            </div>
+        </section>
+    </main>
+
+    <!-- Модалка подтверждения удаления -->
+    <div class="modal modal--confirm" id="adminDeleteModal" aria-hidden="true">
+        <div class="modal__overlay"></div>
+        <div class="modal__content modal__content--confirm">
+            <button class="modal__close" id="adminDeleteModalClose" aria-label="Закрыть">
+                <svg viewBox="0 0 18 18" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <path d="M13.5 4.5L4.5 13.5M4.5 4.5L13.5 13.5" stroke="#322E2F" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/>
+                </svg>
+            </button>
+            <h2 class="modal__title modal__title--confirm">ХОТИТЕ УДАЛИТЬ?</h2>
+            <div class="modal__confirm-actions">
+                <button type="button" class="modal__btn modal__btn--cancel" data-admin-delete-cancel>Отмена</button>
+                <button type="button" class="modal__btn modal__btn--confirm" data-admin-delete-confirm>Удалить</button>
+            </div>
+        </div>
+    </div>
+
+    <%= footer %>
+</body>
+
+</html>

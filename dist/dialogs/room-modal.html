@@ -1,0 +1,88 @@
+<div class="room-modal__content">
+    <!-- Кнопка закрытия предоставляется Fancybox -->
+    
+    <div class="room-modal__header">
+        <div class="room-modal__slider-wrapper">
+            <div class="swiper room-modal__slider" id="roomModalSlider">
+                <div class="swiper-wrapper">
+                    <!-- Слайды будут добавлены через JS на основе roomId -->
+                    <div class="swiper-slide">
+                        <img src="/img/png/room-1.png" alt="Фото номера" class="room-modal__slider-image">
+                    </div>
+                    <div class="swiper-slide">
+                        <img src="/img/png/room-2.png" alt="Фото номера" class="room-modal__slider-image">
+                    </div>
+                    <div class="swiper-slide">
+                        <img src="/img/png/room-3.png" alt="Фото номера" class="room-modal__slider-image">
+                    </div>
+                </div>
+                <button class="room-modal__slider-btn room-modal__slider-btn--prev" type="button" aria-label="Предыдущий слайд">
+                    <svg width="10" height="16" viewBox="0 0 10 16" fill="none" xmlns="http://www.w3.org/2000/svg">
+                        <path d="M9 1L2 8L9 15" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+                    </svg>
+                </button>
+                <button class="room-modal__slider-btn room-modal__slider-btn--next" type="button" aria-label="Следующий слайд">
+                    <svg width="10" height="16" viewBox="0 0 10 16" fill="none" xmlns="http://www.w3.org/2000/svg">
+                        <path d="M1 1L8 8L1 15" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+                    </svg>
+                </button>
+                <div class="swiper-pagination room-modal__slider-pagination"></div>
+            </div>
+        </div>
+        
+        <div class="room-modal__info">
+            <h2 class="room-modal__title" id="roomModalTitle">СЕМЕЙНЫЙ НОМЕР С ТЕРРАСОЙ</h2>
+            <div class="room-modal__price" id="roomModalPrice">От 5000 ₽</div>
+            
+            <div class="room-modal__specs">
+                <div class="room-modal__spec">
+                    <img src="/img/svg/icon-size.svg" alt="Размер" class="room-modal__spec-icon">
+                    <span class="room-modal__spec-label">Размер:</span>
+                    <span class="room-modal__spec-text" id="roomModalSize">22 м²</span>
+                </div>
+                <div class="room-modal__spec">
+                    <svg class="room-modal__spec-icon" width="20" height="20" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
+                        <path d="M10 10C12.7614 10 15 7.76142 15 5C15 2.23858 12.7614 0 10 0C7.23858 0 5 2.23858 5 5C5 7.76142 7.23858 10 10 10Z" fill="currentColor"/>
+                        <path d="M10 12.5C5.16667 12.5 1.25 14.5833 1.25 17.0833V20H18.75V17.0833C18.75 14.5833 14.8333 12.5 10 12.5Z" fill="currentColor"/>
+                    </svg>
+                    <span class="room-modal__spec-label">Количество:</span>
+                    <span class="room-modal__spec-text" id="roomModalCapacity">до 4 человек</span>
+                </div>
+            </div>
+            
+            <div class="room-modal__description">
+                <h3 class="room-modal__description-title">Описание:</h3>
+                <p class="room-modal__description-text" id="roomModalDescription">
+                    Четырехместный номер с балконом и гостиной зоной. Пол выложен кафельной/мраморной плиткой. Кофеварка/чайник, Душ, Телевизор, Кондиционер, Фен, Утюг, Балкон, Холодильник, Рабочий стол, Гладильные принадлежности, Туалет, Собственная ванная комната, Удлиненные кровати (более 2 метров), Отопление, Гардеробная, Кухня, Кабельные каналы, Ванна или душ, Телевизор с плоским экраном, Диван.
+                </p>
+            </div>
+            
+            <div class="room-modal__amenities" id="roomModalAmenities">
+                <div class="room-modal__amenity"><img src="/img/svg/icon-airconditional.svg" alt="Кондиционер"></div>
+                <div class="room-modal__amenity"><img src="/img/svg/icon-bad.svg" alt="Кровать"></div>
+                <div class="room-modal__amenity"><img src="/img/svg/icon-drink.svg" alt="Напитки"></div>
+                <div class="room-modal__amenity"><img src="/img/svg/icon-wifi.svg" alt="Wi-Fi"></div>
+                <div class="room-modal__amenity"><img src="/img/svg/icon-tv.svg" alt="TV"></div>
+            </div>
+        </div>
+    </div>
+    
+    <!-- 
+      Календарь бронирований для этого номера
+      data-room-bookings - JSON массив бронирований, заполняется бэкендом
+      Формат: [{"checkin":"YYYY-MM-DD","checkout":"YYYY-MM-DD","roomId":"N"}]
+    -->
+    <div class="room-modal__calendar-wrapper">
+        <div class="room-modal__calendar-container" id="roomModalCalendarContainer" data-room-bookings="[]">
+            <!-- air-datepicker будет инициализирован через JS -->
+        </div>
+    </div>
+    
+    <div class="room-modal__actions">
+        <button class="room-modal__btn room-modal__btn--cancel" data-fancybox-close>Отмена</button>
+        <button class="room-modal__btn room-modal__btn--book" id="roomModalBook">
+            <img src="/img/svg/icon-calendar-booking.svg" alt="Календарь" class="room-modal__btn-icon">
+            <span>Забронировать</span>
+        </button>
+    </div>
+</div>

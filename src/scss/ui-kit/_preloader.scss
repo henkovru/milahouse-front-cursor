@@ -1,0 +1,48 @@
+@layer components {
+  .preloader {
+    position: fixed;
+    inset: 0;
+    background-color: #FFFFFF;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 20000;
+    opacity: 1;
+    visibility: visible;
+    transition: opacity 0.6s ease, visibility 0.6s ease;
+  }
+
+  .preloader__logo {
+    width: 120px;
+    height: 120px;
+    object-fit: contain;
+    animation: preloader-pulse 2.6s ease-in-out infinite;
+  }
+
+  .preloader--hidden {
+    opacity: 0;
+    visibility: hidden;
+  }
+
+  @keyframes preloader-pulse {
+    0% {
+      opacity: 0.4;
+      transform: scale(0.98);
+    }
+    50% {
+      opacity: 1;
+      transform: scale(1);
+    }
+    100% {
+      opacity: 0.4;
+      transform: scale(0.98);
+    }
+  }
+
+  @media (max-width: 768px) {
+    .preloader__logo {
+      width: 92px;
+      height: 92px;
+    }
+  }
+}

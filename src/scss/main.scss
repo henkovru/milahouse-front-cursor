@@ -1,0 +1,31 @@
+@import "./ui-kit/fonts";
+@import "./ui-kit/basic";
+@import "./ui-kit/waved";
+@import "./ui-kit/container";
+@import "./ui-kit/card";
+@import "./ui-kit/load";
+@import "./ui-kit/image";
+@import "./ui-kit/icon";
+@import "./ui-kit/button";
+@import "./ui-kit/input";
+@import "./ui-kit/pack";
+@import "./ui-kit/custom";
+@import "./ui-kit/datepicker";
+@import "./ui-kit/modal";
+@import "./ui-kit/cookie";
+@import "./ui-kit/preloader";
+@import "./ui-kit/header";
+@import "./ui-kit/hero";
+@import "./ui-kit/sections";
+@import "./ui-kit/admin";
+@import "./ui-kit/404";
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer utilities {
+  .rounded-inherit {
+    border-radius: inherit;
+  }
+}

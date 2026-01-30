@@ -1,0 +1,40 @@
+@layer base {
+  @keyframes waved {
+    to {
+      opacity: 0;
+      scale  : 25;
+    }
+  }
+
+  .waved {
+    z-index: 1;
+
+    @apply absolute inset-0 overflow-hidden pointer-events-none;
+    border-radius: inherit;
+
+    &-circle {
+      background-color: var(--waved-color);
+      animation       : waved 1000ms ease forwards;
+      translate       : -50% -50%;
+      scale           : 0;
+
+      @apply block absolute rounded-full size-10;
+    }
+
+    [data-waved="light"] & {
+      --waved-color: theme("colors.white.DEFAULT / 0.4");
+    }
+
+    [data-waved="dark"] & {
+      --waved-color: theme("colors.black.DEFAULT / 0.4");
+    }
+
+    [data-theme="dark"] [data-waved="light"][data-waved-reverse] & {
+      --waved-color: theme("colors.black.DEFAULT / 0.4");
+    }
+
+    [data-theme="dark"] [data-waved="dark"][data-waved-reverse] & {
+      --waved-color: theme("colors.white.DEFAULT / 0.4");
+    }
+  }
+}
